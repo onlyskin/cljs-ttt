@@ -3,6 +3,3 @@
   (:require [speclj.core]
             [cljs-ttt.core]))
 
-(describe "A ClojureScript test"
-  (it "fails. Fix it!"
-    (should= 0 1)))
