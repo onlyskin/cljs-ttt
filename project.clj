@@ -7,7 +7,6 @@
   :dependencies [[org.clojure/clojure "1.7.0-RC2"]]
 
   :profiles {:dev {:dependencies [[org.clojure/clojurescript "0.0-3308"]
-                                  [cljsjs/mithril "1.0.1-0"]
                                   [speclj "3.3.1"]]}}
   :plugins [[speclj "3.3.1"]
             [lein-cljsbuild "1.0.5"]]

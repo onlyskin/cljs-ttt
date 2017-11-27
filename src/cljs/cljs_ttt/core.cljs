@@ -1,7 +1,4 @@
-(ns cljs-ttt.core
-  (:require cljsjs.mithril))
+(ns cljs-ttt.core)
 
 (def body (.-body js/document))
-(def page (js-obj "view" (fn [] (js/m "p" "Hello World"))))
 
-(.mount js/m body page)
