@@ -12,6 +12,7 @@
                                   play
                                   set-player
                                   game-state
+                                  root-element
                                   current-p
                                   empty-game?
                                   finished-game?
@@ -30,7 +31,9 @@
     (with-redefs [draw-page (stub :draw-page)]
       (run)
 
-      (should-have-invoked :draw-page {:with [game-state]})))
+      (should-have-invoked
+        :draw-page
+        {:with [root-element game-state]})))
 
   (it "inits game-state with empty board"
     (run)
@@ -97,7 +100,9 @@
     (with-redefs [draw-page (stub :draw-page)]
       (restart)
 
-      (should-have-invoked :draw-page {:with [game-state]})))
+      (should-have-invoked
+        :draw-page
+        {:with [root-element game-state]})))
 
   (it "sets game-state board back to an empty board"
     (with-redefs
@@ -119,7 +124,9 @@
                          :p1 :human})]
       (play 3)
 
-      (should-have-invoked :draw-page {:with [game-state]})))
+      (should-have-invoked
+        :draw-page
+        {:with [root-element game-state]})))
 
   (it "plays on the board"
     (with-redefs
@@ -194,4 +201,6 @@
     (with-redefs [draw-page (stub :draw-page)]
       (set-player 1 :computer)
 
-      (should-have-invoked :draw-page {:with [game-state]}))))
+      (should-have-invoked
+        :draw-page
+        {:with [root-element game-state]}))))

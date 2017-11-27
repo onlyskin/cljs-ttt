@@ -5,6 +5,8 @@
                                     make-board
                                     play-on-board]]))
 
+(def root-element (.querySelector js/document "body"))
+
 (def player-for-index {0 :p0 1 :p1})
 (defn- player-count [] (count player-for-index))
 
@@ -13,15 +15,15 @@
                        (player-for-index 1) :human}))
 
 (defn run []
-  (draw-page game-state))
+  (draw-page root-element game-state))
 
 (defn restart []
   (swap! game-state assoc :board (make-board))
-  (draw-page game-state))
+  (draw-page root-element game-state))
 
 (defn set-player [index value]
   (swap! game-state assoc (player-for-index index) value)
-  (draw-page game-state))
+  (draw-page root-element game-state))
 
 (defn- moves-count []
   (->> (@game-state :board)
@@ -55,4 +57,4 @@
   (cond
     (and (not (finished-game?)) (computer-next?))
     (play-on-game-state (get-negamax-move (@game-state :board))))
-  (draw-page game-state))
+  (draw-page root-element game-state))
