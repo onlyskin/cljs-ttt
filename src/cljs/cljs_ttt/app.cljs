@@ -2,9 +2,16 @@
   (:require [cljs-ttt.draw :refer [draw-page]]
             [cljs-ttt.board :refer [available-moves make-board]]))
 
-(def game-state (atom {:board (make-board)}))
+(defn- new-board []
+  (hash-map :board (make-board)))
+
+(def game-state (atom (new-board)))
 
 (defn run []
+  (draw-page game-state))
+
+(defn restart []
+  (swap! game-state new-board)
   (draw-page game-state))
 
 (defn- moves-count []
@@ -22,3 +29,4 @@
   (and
       (not= 9 (moves-count))
       (not= 0 (moves-count))))
+

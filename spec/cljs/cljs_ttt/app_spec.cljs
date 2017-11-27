@@ -7,6 +7,7 @@
                                         stub]])
   (:require [speclj.core]
             [cljs-ttt.app :refer [run
+                                  restart
                                   game-state
                                   empty-game?
                                   finished-game?
@@ -24,8 +25,10 @@
       (run)
 
       (should-have-invoked :draw-page {:with [game-state]})))
+
   (it "inits game-state with empty board"
     (run)
+
     (should=
       (vec-for-string "         ")
       (@game-state :board))))
@@ -80,3 +83,21 @@
       (should=
         false
         (in-progress-game?)))))
+
+(describe "restart"
+  (with-stubs)
+
+  (it "calls draw-page with state"
+    (with-redefs [draw-page (stub :draw-page)]
+      (restart)
+
+      (should-have-invoked :draw-page {:with [game-state]})))
+
+  (it "sets game-state board back to an empty board"
+    (with-redefs
+      [game-state (atom {:board (vec-for-string "XXO      ")})]
+      (restart)
+
+      (should=
+        (vec-for-string "         ")
+        (@game-state :board)))))
