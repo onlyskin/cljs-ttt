@@ -8,7 +8,9 @@
   (:require [speclj.core]
             [cljs-ttt.app :refer [run
                                   game-state
-                                  empty-game?]]  
+                                  empty-game?
+                                  finished-game?
+                                  in-progress-game?]]  
             [cljs-ttt.draw :refer [draw-page]]))
 
 (defn- vec-for-string [board-string]
@@ -30,7 +32,8 @@
 
 (describe "empty-game?"
   (it "is true if game-state board is empty"
-    (with-redefs [game-state (atom {:board (vec-for-string "         ")})]
+    (with-redefs
+      [game-state (atom {:board (vec-for-string "         ")})]
       (should=
         true
         (empty-game?))))
@@ -40,3 +43,40 @@
       (should=
         false
         (empty-game?)))))
+
+(describe "finished-game?"
+  (it "is true if game-state board is full"
+    (with-redefs
+      [game-state (atom {:board (vec-for-string "XXOOOXXOX")})]
+      (should=
+        true
+        (finished-game?))))
+
+  (it "is false if game-state board is not full"
+    (with-redefs
+      [game-state (atom {:board (vec-for-string "XOX      ")})]
+      (should=
+        false
+        (finished-game?)))))
+ 
+(describe "in-progress-game?"
+  (it "is false if game-state board is empty"
+    (with-redefs
+      [game-state (atom {:board (vec-for-string "         ")})]
+      (should=
+        false
+        (in-progress-game?))))
+
+  (it "is true if game-state board has some moves"
+    (with-redefs
+      [game-state (atom {:board (vec-for-string "XOX      ")})]
+      (should=
+        true
+        (in-progress-game?))))
+
+  (it "is false if game-state board is full"
+    (with-redefs
+      [game-state (atom {:board (vec-for-string "XXOOOXXOX")})]
+      (should=
+        false
+        (in-progress-game?)))))

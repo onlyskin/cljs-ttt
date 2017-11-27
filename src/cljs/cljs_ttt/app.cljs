@@ -7,8 +7,18 @@
 (defn run []
   (draw-page game-state))
 
-(defn empty-game? []
+(defn- moves-count []
   (->> (@game-state :board)
        (available-moves)
-       (count)
-       (= 9)))
+       (count)))
+
+(defn empty-game? []
+  (= 9 (moves-count)))
+
+(defn finished-game? []
+  (= 0 (moves-count)))
+
+(defn in-progress-game? []
+  (and
+      (not= 9 (moves-count))
+      (not= 0 (moves-count))))
