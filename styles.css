@@ -3,21 +3,28 @@ body {
 	flex-direction: column;
 	align-items: center;
 }
+
 .container-fluid {
 	display: flex;
 	flex-direction: column;
 }
+
 .row {
 	display: flex;
 }
+
 .board-cell {
 	width: 100px;
 	height: 100px;
 	font-size: 30px;
 	border: 3px solid black;
-	background: linear-gradient(90deg, #8a6ac1 0%, #8a6ac1 5%, #a46ac1 5%, #a46ac1 10%, #be6ac1 10%, #be6ac1 15%, #c16aaa 15%, #c16aaa 20%, #c16a90 20%, #c16a90 25%, #c16a76 25%, #c16a76 30%, #c1796a 30%, #c1796a 35%, #c1936a 35%, #c1936a 40%, #c1ad6a 40%, #c1ad6a 45%, #bbc16a 45%, #bbc16a 50%, #a1c16a 50%, #a1c16a 55%, #87c16a 55%, #87c16a 60%, #6dc16a 60%, #6dc16a 65%, #6ac181 65%, #6ac181 70%, #6ac19b 70%, #6ac19b 75%, #6ac1b6 75%, #6ac1b6 80%, #6ab2c1 80%, #6ab2c1 85%, #6a98c1 85%, #6a98c1 90%, #6a7ec1 90%, #6a7ec1 95%, #706ac1 95%, #706ac1 100%, #8a6ac1 100%, #8a6ac1 105%);
-	background-size: 1800% 1800%;
-	-webkit-animation: rainbow 100s infinite;
+	background: linear-gradient(90deg, #8a6ac1, #8a6ac1, #a46ac1, #a46ac1, #be6ac1, #be6ac1, #c16aaa, #c16aaa, #c16a90, #c16a90, #c16a76, #c16a76, #c1796a, #c1796a, #c1936a, #c1936a, #c1ad6a, #c1ad6a, #bbc16a, #bbc16a, #a1c16a, #a1c16a, #87c16a, #87c16a, #6dc16a, #6dc16a, #6ac181, #6ac181, #6ac19b, #6ac19b, #6ac1b6, #6ac1b6, #6ab2c1, #6ab2c1, #6a98c1, #6a98c1, #6a7ec1, #6a7ec1, #706ac1, #706ac1, #8a6ac1, #8a6ac1);
+	background-size: 1200% 1200%;
+	-webkit-animation: rainbow 30s infinite;
+}
+
+.board-cell:hover {
+    border: 3px dashed black;
 }
 
 @-webkit-keyframes rainbow {

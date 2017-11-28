@@ -16,17 +16,22 @@
 
     (should= 0 (.. root -children -length)))
 
-  (it "has nine .board-cell elements with markers as text"
+  (it "has three .row divs"
     (let [game-state (atom {:board (vec-for-string " X O     ")})]
-
       (draw-page root game-state)
 
       (should=
-        9
-        (.-length (.querySelectorAll root ".board-cell")))
+        3
+        (.-length (.querySelectorAll root ".row")))))
+
+  (it "the .row divs have three .board-cells"
+    (let [game-state (atom {:board (vec-for-string " X O     ")})]
+      (draw-page root game-state)
+
+      (should=
+        3
+        (.-length (.querySelectorAll (.querySelector root ".row") ".board-cell")))
+
       (should=
         "X"
-        (.-textContent (.item (.querySelectorAll root "button") 1))
-        )
-      ))
-  )
+        (.-textContent (.item (.querySelectorAll root ".board-cell") 1))))))
