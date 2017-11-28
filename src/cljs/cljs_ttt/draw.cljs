@@ -1,7 +1,16 @@
 (ns cljs-ttt.draw)
 
+(defn- make-span [position]
+  (let [span (.createElement js/document "span")]
+    (aset span "textContent" (str position))
+    span))
+
 (defn- make-cell [position]
-  (.createElement js/document "button"))
+  (let [cell (.createElement js/document "button")]
+    (.add (.-classList cell) "board-cell")
+    ;(aset cell "textContent" (str position))
+    (.appendChild cell (make-span position))
+    cell))
 
 (defn- make-cells [board]
   (map make-cell board))

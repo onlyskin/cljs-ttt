@@ -16,12 +16,17 @@
 
     (should= 0 (.. root -children -length)))
 
-  (it "has a button"
+  (it "has nine .board-cell elements with markers as text"
     (let [game-state (atom {:board (vec-for-string " X O     ")})]
 
       (draw-page root game-state)
 
       (should=
         9
-        (.-length (.querySelectorAll root "button")))))
+        (.-length (.querySelectorAll root ".board-cell")))
+      (should=
+        "X"
+        (.-textContent (.item (.querySelectorAll root "button") 1))
+        )
+      ))
   )
