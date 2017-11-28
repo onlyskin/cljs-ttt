@@ -14,12 +14,10 @@ body {
 	width: 100px;
 	height: 100px;
 	font-size: 30px;
-	border: 1px solid black;
-    background: linear-gradient(124deg, #40e0d0, #ff8c00, #ff0080);
-    /*background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);*/
-    background-size: 200% 200%;
-    -webkit-animation: rainbow 5s ease infinite;
-	/*background: -webkit-linear-gradient(top, #fcecfc 0%,#fba6e1 50%,#fd89d7 51%,#ff7cd8 100%);*/
+	border: 3px solid black;
+	background: linear-gradient(90deg, #8a6ac1 0%, #8a6ac1 5%, #a46ac1 5%, #a46ac1 10%, #be6ac1 10%, #be6ac1 15%, #c16aaa 15%, #c16aaa 20%, #c16a90 20%, #c16a90 25%, #c16a76 25%, #c16a76 30%, #c1796a 30%, #c1796a 35%, #c1936a 35%, #c1936a 40%, #c1ad6a 40%, #c1ad6a 45%, #bbc16a 45%, #bbc16a 50%, #a1c16a 50%, #a1c16a 55%, #87c16a 55%, #87c16a 60%, #6dc16a 60%, #6dc16a 65%, #6ac181 65%, #6ac181 70%, #6ac19b 70%, #6ac19b 75%, #6ac1b6 75%, #6ac1b6 80%, #6ab2c1 80%, #6ab2c1 85%, #6a98c1 85%, #6a98c1 90%, #6a7ec1 90%, #6a7ec1 95%, #706ac1 95%, #706ac1 100%, #8a6ac1 100%, #8a6ac1 105%);
+	background-size: 1800% 1800%;
+	-webkit-animation: rainbow 100s infinite;
 }
 
 @-webkit-keyframes rainbow {
