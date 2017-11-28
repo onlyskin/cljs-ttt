@@ -21,6 +21,15 @@ body {
 	background: linear-gradient(90deg, #8a6ac1, #8a6ac1, #a46ac1, #a46ac1, #be6ac1, #be6ac1, #c16aaa, #c16aaa, #c16a90, #c16a90, #c16a76, #c16a76, #c1796a, #c1796a, #c1936a, #c1936a, #c1ad6a, #c1ad6a, #bbc16a, #bbc16a, #a1c16a, #a1c16a, #87c16a, #87c16a, #6dc16a, #6dc16a, #6ac181, #6ac181, #6ac19b, #6ac19b, #6ac1b6, #6ac1b6, #6ab2c1, #6ab2c1, #6a98c1, #6a98c1, #6a7ec1, #6a7ec1, #706ac1, #706ac1, #8a6ac1, #8a6ac1);
 	background-size: 1200% 1200%;
 	-webkit-animation: rainbow 30s infinite;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cell-text {
+    font-family: Helvetica;
+    font-size: 70px;
 }
 
 .board-cell:hover {
