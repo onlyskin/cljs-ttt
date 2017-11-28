@@ -1,5 +1,11 @@
 (ns cljs-ttt.draw-spec 
-  (:require-macros [speclj.core :refer [describe it should=]])
+  (:require-macros [speclj.core :refer [describe
+                                        it
+                                        should=
+                                        should-not=
+                                        should-have-invoked
+                                        stub
+                                        with-stubs]])
   (:require [speclj.core]
             [cljs-ttt.draw :refer [clear-element draw-page]]))
 
@@ -9,6 +15,8 @@
 (def root (.createElement js/document "div"))
 
 (describe "draw-page"
+  (with-stubs)
+
   (it "removes any html in the element"
     (.appendChild root (.createElement js/document "p"))  
 
@@ -18,20 +26,40 @@
 
   (it "has three .row divs"
     (let [game-state (atom {:board (vec-for-string " X O     ")})]
-      (draw-page root game-state)
+      (draw-page root game-state {})
 
       (should=
         3
-        (.-length (.querySelectorAll root ".row")))))
+        (-> root
+            (.querySelectorAll ".row")
+            (.-length)))))
 
   (it "the .row divs have three .board-cells"
     (let [game-state (atom {:board (vec-for-string " X O     ")})]
-      (draw-page root game-state)
+      (draw-page root game-state {})
 
       (should=
         3
-        (.-length (.querySelectorAll (.querySelector root ".row") ".board-cell")))
+        (-> root
+            (.querySelector ".row")
+            (.querySelectorAll ".board-cell")
+            (.-length)))
 
       (should=
         "X"
-        (.-textContent (.item (.querySelectorAll root ".board-cell") 1))))))
+        (-> root
+             (.querySelectorAll ".board-cell")
+             (.item 1)
+             (.querySelector ".cell-text")
+             (.-textContent)))))
+
+  (it "the .board-cells have event handlers attached"
+    (let [game-state (atom {:board (vec-for-string " X O     ")})]
+      (draw-page root game-state {:cell-click nil})
+      
+      (should-not=
+        nil
+        (-> root
+            (.querySelector ".board-cell")
+            (.-onclick)))))
+  )

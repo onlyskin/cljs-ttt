@@ -7,6 +7,8 @@
 
 (def root-element (.querySelector js/document "body"))
 
+(declare config)
+
 (def player-for-index {0 :p0 1 :p1})
 (defn- player-count [] (count player-for-index))
 
@@ -14,16 +16,13 @@
                        (player-for-index 0) :human
                        (player-for-index 1) :human}))
 
-(defn run []
-  (draw-page root-element game-state))
-
 (defn restart []
   (swap! game-state assoc :board (make-board))
-  (draw-page root-element game-state))
+  (draw-page root-element game-state config))
 
 (defn set-player [index value]
   (swap! game-state assoc (player-for-index index) value)
-  (draw-page root-element game-state))
+  (draw-page root-element game-state config))
 
 (defn- moves-count []
   (->> (@game-state :board)
@@ -52,9 +51,15 @@
     game-state
     assoc :board (play-on-board (@game-state :board) position)))
 
-(defn play [position]
-  (play-on-game-state position)
+(defn play [row-index cell-index]
+  (play-on-game-state (+ 1 cell-index (* 3 row-index)))
   (cond
     (and (not (finished-game?)) (computer-next?))
     (play-on-game-state (get-negamax-move (@game-state :board))))
-  (draw-page root-element game-state))
+  (draw-page root-element game-state config))
+
+(def config {:cell-click play})
+
+(defn run []
+  (draw-page root-element game-state config))
+

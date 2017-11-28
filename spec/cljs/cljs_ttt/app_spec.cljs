@@ -10,6 +10,7 @@
             [cljs-ttt.app :refer [run
                                   restart
                                   play
+                                  config
                                   set-player
                                   game-state
                                   root-element
@@ -27,13 +28,13 @@
 (describe "run"
   (with-stubs)
 
-  (it "calls draw-page with state"
+  (it "calls draw-page with state and config"
     (with-redefs [draw-page (stub :draw-page)]
       (run)
 
       (should-have-invoked
         :draw-page
-        {:with [root-element game-state]})))
+        {:with [root-element game-state config]})))
 
   (it "inits game-state with empty board"
     (run)
@@ -96,13 +97,13 @@
 (describe "restart"
   (with-stubs)
 
-  (it "calls draw-page with state"
+  (it "calls draw-page with state and config"
     (with-redefs [draw-page (stub :draw-page)]
       (restart)
 
       (should-have-invoked
         :draw-page
-        {:with [root-element game-state]})))
+        {:with [root-element game-state config]})))
 
   (it "sets game-state board back to an empty board"
     (with-redefs
@@ -116,24 +117,24 @@
 (describe "play"
   (with-stubs)
 
-  (it "calls draw-page with state"
+  (it "calls draw-page with state config"
     (with-redefs
       [draw-page (stub :draw-page)
        game-state (atom {:board (vec-for-string "         ")
                          :p0 :human
                          :p1 :human})]
-      (play 3)
+      (play 0 2)
 
       (should-have-invoked
         :draw-page
-        {:with [root-element game-state]})))
+        {:with [root-element game-state config]})))
 
   (it "plays on the board"
     (with-redefs
       [game-state (atom {:board (vec-for-string "XOX O    ")
                          :p0 :human
                          :p1 :human})]
-      (play 8)
+      (play 2 1)
 
       (should=
         (vec-for-string "XOX O  X ")
@@ -146,7 +147,7 @@
                          :p1 :computer})
        get-negamax-move (stub :get-negamax-move {:return 2})]
 
-      (play 3)
+      (play 0 2)
 
       (should=
         (@game-state :board)
@@ -159,7 +160,7 @@
                          :p1 :computer})
        get-negamax-move (stub :get-negamax-move {:return 2})]
 
-      (play 9)
+      (play 2 2)
 
       (should-not-have-invoked :get-negamax-move)
       (should=
@@ -197,10 +198,10 @@
         (@game-state :p1)
         :computer)))
 
-  (it "calls draw-page with state"
+  (it "calls draw-page with state and config"
     (with-redefs [draw-page (stub :draw-page)]
       (set-player 1 :computer)
 
       (should-have-invoked
         :draw-page
-        {:with [root-element game-state]}))))
+        {:with [root-element game-state config]}))))
