@@ -22,15 +22,8 @@
 (defn- best-score [scores] (val (max-by-score scores)))
 
 (declare negamax)
-(defn score-moves [depth board]
-  (let [moves (available-moves board)
-        scores (->> moves
-                    (map
-                      #(negamax
-                         (inc depth)
-                         (play-on-board board %)))
-                    (map -))]
-    (zipmap moves scores)))
+(defn score-moves [depth board moves]
+  (map #(- (negamax (inc depth) (play-on-board board %))) moves))
 
 (defn negamax [depth board]
   (cond
@@ -39,10 +32,12 @@
     (score board)
 
     :else
-    (let [scores (score-moves depth board)]
+    (let [moves (available-moves board)
+          scores (score-moves depth board moves)
+          nodes (zipmap moves scores)]
       (cond
-        (= 0 depth) (best-move scores)
-        :else (best-score scores)))))
+        (= 0 depth) (best-move nodes)
+        :else (best-score nodes)))))
 
 (defn get-negamax-move [board]
   (negamax 0 board))
