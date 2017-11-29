@@ -50,7 +50,8 @@
     (play-on-game-state (get-negamax-move (@game-state :board))))
   (draw-page root-element game-state config))
 
-(def config {:cell-click play})
+(def config {:cell-click play
+             :player-click set-player})
 
 (defn run []
   (draw-page root-element game-state config))

@@ -66,7 +66,41 @@
         nil
         (-> root
             (.querySelector ".board-cell")
-            (.-onclick))))))
+            (.-onclick)))))
+  
+  (it "there are four player-buttons when the game is not started"
+    (let [game-state (atom {:board (vec-for-string "         ")
+                            :p0 :human
+                            :p1 :human})]
+      (draw-page root game-state {:cell-click nil})
+
+      (should=
+        4
+        (-> root
+            (.querySelectorAll ".player-button")
+            (.-length)))))
+
+  ;(it "the first and 4th buttons have class highlight"
+  ;  (let [game-state (atom {:board (vec-for-string "         ")
+  ;                          :p0 :human
+  ;                          :p1 :computer})]
+  ;    (draw-page root game-state {:cell-click nil})
+
+  ;    (should=
+  ;      "player-button highlight"
+  ;      (-> root
+  ;          (.querySelectorAll ".player-button")
+  ;          (.item 0)
+  ;          (.-className))))
+
+  ;    (should=
+  ;      "player-button highlight"
+  ;      (-> root
+  ;          (.querySelectorAll ".player-button")
+  ;          (.item 4)
+  ;          (.-className))) 
+  ;  )
+  )
 
 (describe "empty-game?"
   (it "is true if game-state board is empty"
