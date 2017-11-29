@@ -10,6 +10,8 @@
             [cljs-ttt.draw :refer [clear-element
                                    draw-page
                                    empty-game?
+                                   in-progress-game?
+                                   finished-game?
                                    ]]))
 
 (defn- vec-for-string [board-string]
@@ -68,13 +70,52 @@
 
 (describe "empty-game?"
   (it "is true if game-state board is empty"
-    (let [game-state (atom {:board (vec-for-string "         ")})]
+    (let
+      [game-state (atom {:board (vec-for-string "         ")})]
       (should=
         true
         (empty-game? game-state))))
 
   (it "is false if game-state board not empty"
-    (let [game-state (atom {:board (vec-for-string "XOX      ")})]
+    (let 
+      [game-state (atom {:board (vec-for-string "XOX      ")})]
       (should=
         false
         (empty-game? game-state)))))
+
+(describe "finished-game?"
+  (it "is true if game-state board is full"
+    (let
+      [game-state (atom {:board (vec-for-string "XXOOOXXOX")})]
+      (should=
+        true
+        (finished-game? game-state))))
+
+  (it "is false if game-state board is not full"
+    (let
+      [game-state (atom {:board (vec-for-string "XOX      ")})]
+      (should=
+        false
+        (finished-game? game-state)))))
+
+(describe "in-progress-game?"
+  (it "is false if game-state board is empty"
+    (let
+      [game-state (atom {:board (vec-for-string "         ")})]
+      (should=
+        false
+        (in-progress-game? game-state))))
+
+  (it "is true if game-state board has some moves"
+    (let
+      [game-state (atom {:board (vec-for-string "XOX      ")})]
+      (should=
+        true
+        (in-progress-game? game-state))))
+
+  (it "is false if game-state board is full"
+    (let
+      [game-state (atom {:board (vec-for-string "XXOOOXXOX")})]
+      (should=
+        false
+        (in-progress-game? game-state)))))

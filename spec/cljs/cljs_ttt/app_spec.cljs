@@ -14,9 +14,7 @@
                                   set-player
                                   game-state
                                   root-element
-                                  current-p
-                                  finished-game?
-                                  in-progress-game?]]  
+                                  current-p]]
             [cljs-ttt.draw :refer [draw-page]]
             [cljs-ttt.computer-player :refer [get-negamax-move]]
             ))
@@ -41,43 +39,6 @@
     (should=
       (vec-for-string "         ")
       (@game-state :board))))
-
-(describe "finished-game?"
-  (it "is true if game-state board is full"
-    (with-redefs
-      [game-state (atom {:board (vec-for-string "XXOOOXXOX")})]
-      (should=
-        true
-        (finished-game?))))
-
-  (it "is false if game-state board is not full"
-    (with-redefs
-      [game-state (atom {:board (vec-for-string "XOX      ")})]
-      (should=
-        false
-        (finished-game?)))))
- 
-(describe "in-progress-game?"
-  (it "is false if game-state board is empty"
-    (with-redefs
-      [game-state (atom {:board (vec-for-string "         ")})]
-      (should=
-        false
-        (in-progress-game?))))
-
-  (it "is true if game-state board has some moves"
-    (with-redefs
-      [game-state (atom {:board (vec-for-string "XOX      ")})]
-      (should=
-        true
-        (in-progress-game?))))
-
-  (it "is false if game-state board is full"
-    (with-redefs
-      [game-state (atom {:board (vec-for-string "XXOOOXXOX")})]
-      (should=
-        false
-        (in-progress-game?)))))
 
 (describe "restart"
   (with-stubs)

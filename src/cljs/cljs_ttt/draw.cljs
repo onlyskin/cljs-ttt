@@ -9,6 +9,14 @@
 (defn empty-game? [game-state]
   (= 9 (moves-count (@game-state :board))))
 
+(defn finished-game? [game-state]
+  (= 0 (moves-count (@game-state :board))))
+
+(defn in-progress-game? [game-state]
+  (and
+      (not= 9 (moves-count (@game-state :board)))
+      (not= 0 (moves-count (@game-state :board)))))
+
 (defn clear-element [element]
   (aset element "innerHTML" ""))
 

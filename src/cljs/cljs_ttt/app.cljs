@@ -35,13 +35,8 @@
 (defn- computer-next? []
   (= :computer (@game-state (current-p))))
 
-(defn finished-game? []
+(defn game-over? []
   (= 0 (moves-count)))
-
-(defn in-progress-game? []
-  (and
-      (not= 9 (moves-count))
-      (not= 0 (moves-count))))
 
 (defn- play-on-game-state [position]
   (swap!
@@ -51,7 +46,7 @@
 (defn play [row-index cell-index]
   (play-on-game-state (+ 1 cell-index (* 3 row-index)))
   (cond
-    (and (not (finished-game?)) (computer-next?))
+    (and (not (game-over?)) (computer-next?))
     (play-on-game-state (get-negamax-move (@game-state :board))))
   (draw-page root-element game-state config))
 
