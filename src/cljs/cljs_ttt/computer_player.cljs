@@ -21,7 +21,7 @@
     (state :break) state
     :else (let
             [new-board (play-on-board (state :board) move)
-             best-node (negamax
+             negamax-result (negamax
                          {:board new-board
                           :best-move nil
                           :best-score -10000
@@ -29,8 +29,10 @@
                           :beta (- (state :alpha))
                           :colour (- (state :colour))
                           :break false})
+             best-node [(first negamax-result)
+                        (- (last negamax-result))]
              best-score (max (last best-node) (state :best-score))
-             best-move (if (> (last best-node) (state :best-score)) (first best-node) move)
+             best-move (if (> (last best-node) (state :best-score)) move (state :best-move))
              alpha (max (state :alpha) (last best-node))
              break (>= (state :alpha) (state :beta))]
             {:board (state :board)
