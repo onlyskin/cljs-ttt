@@ -18,26 +18,21 @@
 (defn- max-by-score [scores]
   (apply max-key val scores)) 
 
-(defn- best-move [scores] (key (max-by-score scores)))
-(defn- best-score [scores] (val (max-by-score scores)))
-
 (declare negamax)
-(defn score-moves [depth board moves]
-  (map #(- (negamax (inc depth) (play-on-board board %))) moves))
+(defn score-moves [board moves]
+  (map #(- (last (negamax (play-on-board board %)))) moves))
 
-(defn negamax [depth board]
+(defn negamax [board]
   (cond
 
     (game-over? board)
-    (score board)
+    [nil (score board)]
 
     :else
     (let [moves (available-moves board)
-          scores (score-moves depth board moves)
-          nodes (zipmap moves scores)]
-      (cond
-        (= 0 depth) (best-move nodes)
-        :else (best-score nodes)))))
+          scores (score-moves board moves)
+          nodes (map vector moves scores)]
+      (max-by-score nodes))))
 
 (defn get-negamax-move [board]
-  (negamax 0 board))
+  (first (negamax board)))
