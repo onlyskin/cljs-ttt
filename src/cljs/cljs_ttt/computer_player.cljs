@@ -19,8 +19,13 @@
   (apply max-key val scores)) 
 
 (declare negamax)
-(defn score-moves [board moves]
-  (map #(- (last (negamax (play-on-board board %)))) moves))
+(defn make-nodes [board moves]
+  (let [nodes (->> moves
+                   (map #(->> %
+                              (play-on-board board)
+                              (negamax))))]
+    (map #(vector %1 (- (last %2))) moves nodes)))
+
 
 (defn negamax [board]
   (cond
@@ -30,8 +35,7 @@
 
     :else
     (let [moves (available-moves board)
-          scores (score-moves board moves)
-          nodes (map vector moves scores)]
+          nodes (make-nodes board moves)]
       (max-by-score nodes))))
 
 (defn get-negamax-move [board]
