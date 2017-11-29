@@ -90,6 +90,23 @@
             (.querySelectorAll ".player-button")
             (.-length)))))
 
+  (it "it has restart button when game over"
+    (let [game-state (atom {:board (vec-for-string "XOO XO  X")})]
+      (draw-page root game-state {:cell-click nil})
+      
+      (should=
+        1
+        (-> root
+            (.querySelectorAll ".restart-button")
+            (.-length)))
+
+      ;(should-not=
+      ;  nil
+      ;  (-> root
+      ;      (.querySelectorAll ".restart-button")
+      ;      (.-onclick)))
+      ))
+  
   ;(it "the first and 4th buttons have class highlight"
   ;  (let [game-state (atom {:board (vec-for-string "         ")
   ;                          :p0 :human

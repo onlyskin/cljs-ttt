@@ -44,14 +44,20 @@
     assoc :board (play-on-board (@game-state :board) position)))
 
 (defn play [row-index cell-index]
-  (play-on-game-state (+ 1 cell-index (* 3 row-index)))
-  (cond
-    (and (not (game-over?)) (computer-next?))
-    (play-on-game-state (get-negamax-move (@game-state :board))))
+  (let [position (+ 1 cell-index (* 3 row-index))
+        available (available-moves (@game-state :board))]
+    (cond
+      (some #(= position %) available)
+      (doall
+        (play-on-game-state position)
+        (cond
+          (and (not (game-over?)) (computer-next?))
+          (play-on-game-state (get-negamax-move (@game-state :board)))))))
   (draw-page root-element game-state config))
 
 (def config {:cell-click play
-             :player-click set-player})
+             :player-click set-player
+             :restart restart})
 
 (defn run []
   (draw-page root-element game-state config))

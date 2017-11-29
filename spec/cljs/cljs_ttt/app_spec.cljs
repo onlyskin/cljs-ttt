@@ -86,6 +86,17 @@
         (vec-for-string "XOX O  X ")
         (@game-state :board))))
 
+  (it "doesnt play on the board if move unavailable"
+    (with-redefs
+      [game-state (atom {:board (vec-for-string "XOX O    ")
+                         :p0 :human
+                         :p1 :human})]
+      (play 0 1)
+
+      (should=
+        (vec-for-string "XOX O    ")
+        (@game-state :board))))
+
   (it "plays computer move if the next player is a computer"
     (with-redefs
       [game-state (atom {:board (vec-for-string "X   O    ")

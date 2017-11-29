@@ -86,10 +86,19 @@
     (doseq [index (range 0 2)]
       (add-button-pair button-container index game-state config))))
 
+(defn- add-restart-button [root game-state config]
+  (let [element (.createElement js/document "div")]
+    (.add (.-classList element) "restart-button")
+    (aset element "textContent" "Play Again")
+    (aset element "onclick" #((config :restart)))
+    (.appendChild root element)))
+
 (defn draw-page [root game-state config]
   (clear-element root)
   (let [grid-container (make-grid-container)]
     (make-grid grid-container game-state config)
     (.appendChild root grid-container))
   (add-buttons root game-state config)
-  )
+  (cond
+    (game-over? (@game-state :board))
+    (add-restart-button root game-state config)))
