@@ -59,6 +59,16 @@
              (.-textContent)))))
 
   (it "the .board-cells have event handlers attached"
+    (let [game-state (atom {:board (vec-for-string "XOO XO  X")})]
+      (draw-page root game-state {:cell-click nil})
+      
+      (should=
+        nil
+        (-> root
+            (.querySelector ".board-cell")
+            (.-onclick)))))
+
+  (it "the .board-cells have event handlers attached"
     (let [game-state (atom {:board (vec-for-string " X O     ")})]
       (draw-page root game-state {:cell-click nil})
       

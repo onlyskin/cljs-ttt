@@ -1,5 +1,5 @@
 (ns cljs-ttt.draw
-  (:require [cljs-ttt.board :refer [available-moves]]))
+  (:require [cljs-ttt.board :refer [available-moves game-over?]]))
 
 (defn- moves-count [board]
   (->> board
@@ -26,16 +26,16 @@
     (aset cell-text "textContent" (str cell-value))
     (.appendChild cell cell-text)))
 
-(defn- make-cell [config row-index cell-index cell-value]
+(defn- make-cell [board config row-index cell-index cell-value]
   (let [cell (.createElement js/document "div")]
     (.add (.-classList cell) "board-cell")
     (add-cell-text cell cell-value)
-    (aset cell "onclick" #((config :cell-click) row-index cell-index))
+    (cond (not (game-over? board)) (aset cell "onclick" #((config :cell-click) row-index cell-index)))
     cell))
 
-(defn- make-row [config row-index values]
+(defn- make-row [board config row-index values]
   (let [row (.createElement js/document "div")
-        cells (map-indexed #(make-cell config row-index %1 %2) values)]
+        cells (map-indexed #(make-cell board config row-index %1 %2) values)]
     (.add (.-classList row) "row")
     (doseq [cell cells]
       (.appendChild row cell))
@@ -44,7 +44,7 @@
 (defn- make-rows [board config]
   (->> board
        (partition 3)
-       (map-indexed #(make-row config %1 %2))))
+       (map-indexed #(make-row board config %1 %2))))
 
 (defn- make-grid-container []
   (let [container (.createElement js/document "div")]
