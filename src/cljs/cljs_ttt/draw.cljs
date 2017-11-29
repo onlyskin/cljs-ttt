@@ -1,4 +1,13 @@
-(ns cljs-ttt.draw)
+(ns cljs-ttt.draw
+  (:require [cljs-ttt.board :refer [available-moves]]))
+
+(defn- moves-count [board]
+  (->> board
+       (available-moves)
+       (count)))
+
+(defn empty-game? [game-state]
+  (= 9 (moves-count (@game-state :board))))
 
 (defn clear-element [element]
   (aset element "innerHTML" ""))

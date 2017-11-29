@@ -15,7 +15,6 @@
                                   game-state
                                   root-element
                                   current-p
-                                  empty-game?
                                   finished-game?
                                   in-progress-game?]]  
             [cljs-ttt.draw :refer [draw-page]]
@@ -42,20 +41,6 @@
     (should=
       (vec-for-string "         ")
       (@game-state :board))))
-
-(describe "empty-game?"
-  (it "is true if game-state board is empty"
-    (with-redefs
-      [game-state (atom {:board (vec-for-string "         ")})]
-      (should=
-        true
-        (empty-game?))))
-
-  (it "is false if game-state board not empty"
-    (with-redefs [game-state (atom {:board (vec-for-string "XOX      ")})]
-      (should=
-        false
-        (empty-game?)))))
 
 (describe "finished-game?"
   (it "is true if game-state board is full"

@@ -35,9 +35,6 @@
 (defn- computer-next? []
   (= :computer (@game-state (current-p))))
 
-(defn empty-game? []
-  (= 9 (moves-count)))
-
 (defn finished-game? []
   (= 0 (moves-count)))
 

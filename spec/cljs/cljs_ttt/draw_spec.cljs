@@ -7,7 +7,10 @@
                                         stub
                                         with-stubs]])
   (:require [speclj.core]
-            [cljs-ttt.draw :refer [clear-element draw-page]]))
+            [cljs-ttt.draw :refer [clear-element
+                                   draw-page
+                                   empty-game?
+                                   ]]))
 
 (defn- vec-for-string [board-string]
   (clojure.string/split board-string ""))
@@ -61,5 +64,17 @@
         nil
         (-> root
             (.querySelector ".board-cell")
-            (.-onclick)))))
-  )
+            (.-onclick))))))
+
+(describe "empty-game?"
+  (it "is true if game-state board is empty"
+    (let [game-state (atom {:board (vec-for-string "         ")})]
+      (should=
+        true
+        (empty-game? game-state))))
+
+  (it "is false if game-state board not empty"
+    (let [game-state (atom {:board (vec-for-string "XOX      ")})]
+      (should=
+        false
+        (empty-game? game-state)))))
