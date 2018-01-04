@@ -12,17 +12,19 @@
             [lein-cljsbuild "1.0.5"]]
 
   :cljsbuild {:builds        {:dev  {:source-paths   ["src/cljs" "spec/cljs"]
-                                     :compiler       {:output-to     "js/cljs-ttt_dev.js"
+                                     :compiler       {:output-to "resources/public/js/compiled/main.js"
+                                                      :output-dir "resources/public/js/compiled"
                                                       :optimizations :whitespace
+                                                      :source-map "resources/public/js/compiled/main.js.map"
                                                       :pretty-print  true}
-                                     :notify-command ["phantomjs"  "bin/speclj" "js/cljs-ttt_dev.js"]}
+                                     :notify-command ["phantomjs"  "bin/speclj" "resources/public/js/compiled/main.js"]}
 
                               :prod {:source-paths ["src/cljs"]
                                      :compiler     {:output-to     "js/cljs-ttt.js"
                                                     :optimizations :simple}}}
-              :test-commands {"test" ["phantomjs" "bin/speclj" "js/cljs-ttt_dev.js"]}}
+              :test-commands {"test" ["phantomjs" "bin/speclj" "resources/public/js/compiled/main.js"]}}
 
   :source-paths ["src/clj" "src/cljs"]
-  :test-paths ["spec/clj"]
+  :test-paths ["spec/clj", "spec/cljs"]
 
   :aliases {"cljs" ["do" "clean," "cljsbuild" "once" "dev"]})

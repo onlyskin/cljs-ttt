@@ -23,6 +23,7 @@
             [new-board (play-on-board (state :board) move)
              negamax-result (negamax
                          {:board new-board
+                          :depth (+ 1 (state :depth))
                           :best-move nil
                           :best-score -10000
                           :alpha (- (state :beta))
@@ -35,7 +36,22 @@
              best-move (if (> (last best-node) (state :best-score)) move (state :best-move))
              alpha (max (state :alpha) (last best-node))
              break (>= (state :alpha) (state :beta))]
+            (when (= 0 (state :depth)) (.log js/console
+                  (str
+                    (apply str (repeat (state :depth) "    "))
+                    "move: " move
+                    "\n"
+                    (apply str (repeat (state :depth) "    "))
+                    "score: " best-score
+                    "\n"
+                    (apply str (repeat (state :depth) "    "))
+                    "best-move: " best-move
+                    "\n"
+                    (apply str (repeat (state :depth) "    "))
+                    "board: " (clojure.string/join new-board)
+                    )))
             {:board (state :board)
+             :depth (state :depth)
              :best-score best-score
              :best-move best-move
              :alpha alpha
@@ -47,7 +63,11 @@
   (cond
 
     (game-over? (state :board))
-    [nil (* (state :colour) (score (state :board)))]
+      ;(when (= 0 (state :depth)) (.log js/console (str
+      ;                   (apply str (repeat (state :depth) "    "))
+      ;                   "game over, score: "
+      ;                   (* (state :colour) (score (state :board))))))
+      [nil (* (state :colour) (score (state :board)))]
 
     :else
     (let [moves (available-moves (state :board))
@@ -56,6 +76,7 @@
 
 (defn get-negamax-move [board]
   (let [initial-state {:board board
+                       :depth 0
                        :best-score -10000
                        :best-move nil
                        :alpha -10000
