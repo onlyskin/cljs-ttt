@@ -9,40 +9,69 @@
 (defn- winning-score [] 1000)
 (defn- losing-score [] -1000)
 
-(defn- score [board]
+(defn- score [state]
   (cond
-    (tie? board) 0
-    (winner? board (current-marker board)) (winning-score)
-    :else (losing-score)))
+    (tie? (state :board)) 0
 
-(defn- max-by-score [scores]
-  (apply max-key val scores)) 
+    (winner? (state :board) (state :marker))
+    (/ (state :depth) (winning-score))
 
-(defn- best-move [scores] (key (max-by-score scores)))
-(defn- best-score [scores] (val (max-by-score scores)))
+    :else (/ (state :depth) (losing-score))))
 
 (declare negamax)
-(defn score-moves [depth board]
-  (let [moves (available-moves board)
-        scores (->> moves
-                    (map
-                      #(negamax
-                         (inc depth)
-                         (play-on-board board %)))
-                    (map -))]
-    (zipmap moves scores)))
-
-(defn negamax [depth board]
+(defn f [state move]
   (cond
+    (state :break) state
 
-    (game-over? board)
-    (score board)
+    :else (let
+            [new-board (play-on-board (state :board) move)
+             negamax-result (negamax
+                         {:board new-board
+                          :depth (+ 1 (state :depth))
+                          :best-move nil
+                          :best-score (state :best-score)
+                          :alpha (- (state :beta))
+                          :beta (- (state :alpha))
+                          :colour (- (state :colour))
+                          :break false
+                          :marker (state :marker)})
+             best-node [(first negamax-result)
+                        (- (last negamax-result))]
+             best-score (max (last best-node) (state :best-score))
+             best-move (if (> (last best-node) (state :best-score))
+                         move
+                         (state :best-move))
+             alpha (max (state :alpha) (last best-node))
+             break (>= (state :alpha) (state :beta))]
+
+            {:board (state :board)
+             :depth (state :depth)
+             :best-score best-score
+             :best-move best-move
+             :alpha alpha
+             :beta (state :beta)
+             :colour (state :colour)
+             :break break
+             :marker (state :marker)})))
+
+(defn negamax [state]
+  (cond
+    (game-over? (state :board))
+      [nil (* (state :colour) (score state))]
 
     :else
-    (let [scores (score-moves depth board)]
-      (cond
-        (= 0 depth) (best-move scores)
-        :else (best-score scores)))))
+    (let [moves (available-moves (state :board))
+          result (reduce f state moves)]
+      [(result :best-move) (result :best-score)])))
 
 (defn get-negamax-move [board]
-  (negamax 0 board))
+  (let [initial-state {:board board
+                       :depth 0
+                       :best-score -10000
+                       :best-move nil
+                       :alpha -10000
+                       :beta 10000
+                       :colour 1
+                       :break false
+                       :marker (current-marker board)}]
+    (first (negamax initial-state))))

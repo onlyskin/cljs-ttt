@@ -29,10 +29,4 @@
     (should=
       3
       (get-negamax-move
-        (vec-for-string "X  XO O  "))))
-
-  (it "O plays in centre"
-    (should=
-      5
-      (get-negamax-move
-        (vec-for-string "X        "))))) 
+        (vec-for-string "X  XO O  ")))))
