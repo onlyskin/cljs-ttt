@@ -9,47 +9,41 @@
 (defn- winning-score [] 1000)
 (defn- losing-score [] -1000)
 
-(defn- score [board]
+(defn- score [state]
   (cond
-    (tie? board) 0
-    (winner? board (current-marker board)) (winning-score)
-    :else (losing-score)))
+    (tie? (state :board)) 0
+
+    (winner? (state :board) (state :marker))
+    (/ (state :depth) (winning-score))
+
+    :else (/ (state :depth) (losing-score))))
 
 (declare negamax)
 (defn f [state move]
   (cond
     (state :break) state
+
     :else (let
             [new-board (play-on-board (state :board) move)
              negamax-result (negamax
                          {:board new-board
                           :depth (+ 1 (state :depth))
                           :best-move nil
-                          :best-score -10000
+                          :best-score (state :best-score)
                           :alpha (- (state :beta))
                           :beta (- (state :alpha))
                           :colour (- (state :colour))
-                          :break false})
+                          :break false
+                          :marker (state :marker)})
              best-node [(first negamax-result)
                         (- (last negamax-result))]
              best-score (max (last best-node) (state :best-score))
-             best-move (if (> (last best-node) (state :best-score)) move (state :best-move))
+             best-move (if (> (last best-node) (state :best-score))
+                         move
+                         (state :best-move))
              alpha (max (state :alpha) (last best-node))
              break (>= (state :alpha) (state :beta))]
-            (when (= 0 (state :depth)) (.log js/console
-                  (str
-                    (apply str (repeat (state :depth) "    "))
-                    "move: " move
-                    "\n"
-                    (apply str (repeat (state :depth) "    "))
-                    "score: " best-score
-                    "\n"
-                    (apply str (repeat (state :depth) "    "))
-                    "best-move: " best-move
-                    "\n"
-                    (apply str (repeat (state :depth) "    "))
-                    "board: " (clojure.string/join new-board)
-                    )))
+
             {:board (state :board)
              :depth (state :depth)
              :best-score best-score
@@ -57,17 +51,13 @@
              :alpha alpha
              :beta (state :beta)
              :colour (state :colour)
-             :break break})))
+             :break break
+             :marker (state :marker)})))
 
 (defn negamax [state]
   (cond
-
     (game-over? (state :board))
-      ;(when (= 0 (state :depth)) (.log js/console (str
-      ;                   (apply str (repeat (state :depth) "    "))
-      ;                   "game over, score: "
-      ;                   (* (state :colour) (score (state :board))))))
-      [nil (* (state :colour) (score (state :board)))]
+      [nil (* (state :colour) (score state))]
 
     :else
     (let [moves (available-moves (state :board))
@@ -82,5 +72,6 @@
                        :alpha -10000
                        :beta 10000
                        :colour 1
-                       :break false}]
+                       :break false
+                       :marker (current-marker board)}]
     (first (negamax initial-state))))
